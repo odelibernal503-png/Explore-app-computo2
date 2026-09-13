@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Design tokens de la Explorer App integrados con Tailwind v4 */
+@theme {
+  /* Colores personalizados */
+  --color-background: #f6e8ea;
+  --color-border: #e5e7eb;
+  --color-disabled: #9ca3af;
+  --color-primary: #896279;
+  --color-secondary: #f9a03f;
+  --color-surface: #ffffff;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+
+  /* Tipografía */
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+}
+
+/* Estilos base opcionales para aplicar tus tokens globales al body */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
