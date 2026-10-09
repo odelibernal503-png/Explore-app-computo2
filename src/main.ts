@@ -1,7 +1,9 @@
-import './style.css'
+import "./style.css";
+import type { Country } from "./types/country";
+import { fetchCountries } from "./api/countries";
+import { renderCountryGrid } from "./render/countryGrid";
 
-//Control accesible del menú de navegación móvil
-
+// Control accesible del menú de navegación móvil
 const menuButton: HTMLButtonElement | null =
   document.querySelector<HTMLButtonElement>("#menu-toggle");
 
@@ -58,3 +60,45 @@ if (menuButton && mainMenu) {
     setMenuState(false);
   });
 }
+
+function getRequiredElement<T extends Element>(
+  selector: string
+): T {
+  const element: T | null =
+    document.querySelector<T>(selector);
+
+  if (!element) {
+    throw new Error(
+      `No se encontró el elemento: ${selector}`
+    );
+  }
+
+  return element;
+}
+
+const countriesContainer: HTMLElement = 
+  getRequiredElement<HTMLElement>("#countries-container");
+
+async function initializeApp(): Promise<void> {
+  try {
+    const countries: Country[] = await fetchCountries();
+    countriesContainer.innerHTML = renderCountryGrid(countries);
+  } catch (error: unknown) {
+    const message: string =
+      error instanceof Error
+        ? error.message
+        : "Ocurrió un error desconocido.";
+
+    countriesContainer.innerHTML = `
+      <p
+        class="col-span-full text-center text-red-600"
+        role="alert"
+      >
+        ${message}
+      </p>
+    `;
+    console.error(error);
+  }
+}
+
+void initializeApp();

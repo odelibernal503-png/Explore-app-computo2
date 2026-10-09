@@ -80,69 +80,17 @@
         </div>
       </section>
 
-      <!-- Grid responsive de tarjetas -->
+      <!-- Grid responsive de tarjetas (Dinámico) -->
       <section id="paises" class="w-full">
         <h3 class="text-lg font-bold text-[#111827] mb-5">Países recomendados</h3>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          
-          <!-- Tarjeta 1 - Corea del Sur -->
-          <article class="bg-white rounded-md shadow-sm overflow-hidden pb-5 border border-gray-200">
-            <div class="h-36 bg-white overflow-hidden border-b border-gray-100 flex items-center justify-center">
-              <img src="/kr.png" alt="Bandera de Corea del Sur" class="w-full h-full object-cover">
-            </div>
-            <div class="px-5 pt-4">
-              <h4 class="text-sm font-bold text-[#111827] mb-3">Corea del Sur</h4>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Población:</strong> 51.600.000</p>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Región:</strong> Asia</p>
-              <p class="text-[11px] text-[#525252] mb-4"><strong class="font-semibold text-[#111827]">Capital:</strong> Seúl</p>
-              <button type="button" class="bg-[#f9a03f] text-[#111827] text-xs font-medium py-1.5 px-4 rounded-md shadow-sm hover:bg-[#e89134] hover:shadow-md active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 cursor-pointer">Ver detalles</button>
-            </div>
-          </article>
-
-          <!-- Tarjeta 2 - Japón -->
-          <article class="bg-white rounded-md shadow-sm overflow-hidden pb-5 border border-gray-200">
-            <div class="h-36 bg-white overflow-hidden border-b border-gray-100 flex items-center justify-center">
-              <img src="/jp.png" alt="Bandera de Japón" class="w-full h-full object-cover">
-            </div>
-            <div class="px-5 pt-4">
-              <h4 class="text-sm font-bold text-[#111827] mb-3">Japón</h4>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Población:</strong> 123,767,642</p>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Región:</strong> Asia</p>
-              <p class="text-[11px] text-[#525252] mb-4"><strong class="font-semibold text-[#111827]">Capital:</strong> Tokio</p>
-              <button type="button" class="bg-[#f9a03f] text-[#111827] text-xs font-medium py-1.5 px-4 rounded-md shadow-sm hover:bg-[#e89134] hover:shadow-md active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 cursor-pointer">Ver detalles</button>
-            </div>
-          </article>
-
-          <!-- Tarjeta 3 - España -->
-          <article class="bg-white rounded-md shadow-sm overflow-hidden pb-5 border border-gray-200">
-            <div class="h-36 bg-white overflow-hidden border-b border-gray-100 flex items-center justify-center">
-              <img src="/es.png" alt="Bandera de España" class="w-full h-full object-cover">
-            </div>
-            <div class="px-5 pt-4">
-              <h4 class="text-sm font-bold text-[#111827] mb-3">España</h4>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Población:</strong> 49,801,559</p>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Región:</strong> Europa</p>
-              <p class="text-[11px] text-[#525252] mb-4"><strong class="font-semibold text-[#111827]">Capital:</strong> Madrid</p>
-              <button type="button" class="bg-[#f9a03f] text-[#111827] text-xs font-medium py-1.5 px-4 rounded-md shadow-sm hover:bg-[#e89134] hover:shadow-md active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 cursor-pointer">Ver detalles</button>
-            </div>
-          </article>
-
-          <!-- Tarjeta 4 - El Salvador -->
-          <article class="bg-white rounded-md shadow-sm overflow-hidden pb-5 border border-gray-200">
-            <div class="h-36 bg-white overflow-hidden border-b border-gray-100 flex items-center justify-center">
-              <img src="/sv.png" alt="Bandera de El Salvador" class="w-full h-full object-cover">
-            </div>
-            <div class="px-5 pt-4">
-              <h4 class="text-sm font-bold text-[#111827] mb-3">El Salvador</h4>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Población:</strong> 6.395.000</p>
-              <p class="text-[11px] text-[#525252] mb-1"><strong class="font-semibold text-[#111827]">Región:</strong> Centroamérica</p>
-              <p class="text-[11px] text-[#525252] mb-4"><strong class="font-semibold text-[#111827]">Capital:</strong> San Salvador</p>
-              <button type="button" class="bg-[#f9a03f] text-[#111827] text-xs font-medium py-1.5 px-4 rounded-md shadow-sm hover:bg-[#e89134] hover:shadow-md active:scale-95 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 cursor-pointer">Ver detalles</button>
-            </div>
-          </article>
-
-        </div>
+        <section 
+            id="countries-container"
+            class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4"
+            aria-label="Listado de países"
+        >
+          <!-- Las tarjetas se cargarán dinámicamente aquí mediante TypeScript -->
+        </section>
       </section>
 
     </main>
