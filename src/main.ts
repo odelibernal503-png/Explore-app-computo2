@@ -3,102 +3,60 @@ import type { Country } from "./types/country";
 import { fetchCountries } from "./api/countries";
 import { renderCountryGrid } from "./render/countryGrid";
 import { filterCountries } from "./utils/filter";
+import { renderEmpty, renderError, renderLoading } from "./render/states";
 
-// Control accesible del menú de navegación móvil
+// Control del menú móvil
 const menuButton: HTMLButtonElement | null =
   document.querySelector<HTMLButtonElement>("#menu-toggle");
-
 const mainMenu: HTMLElement | null =
   document.querySelector<HTMLElement>("#main-menu");
-
 const openIcon: SVGElement | null =
   document.querySelector<SVGElement>("#menu-open-icon");
-
 const closeIcon: SVGElement | null =
   document.querySelector<SVGElement>("#menu-close-icon");
 
 function setMenuState(isOpen: boolean): void {
-  if (!menuButton || !mainMenu || !openIcon || !closeIcon) {
-    return;
-  }
-
+  if (!menuButton || !mainMenu || !openIcon || !closeIcon) return;
   mainMenu.classList.toggle("hidden", !isOpen);
   openIcon.classList.toggle("hidden", isOpen);
   closeIcon.classList.toggle("hidden", !isOpen);
-
   menuButton.setAttribute("aria-expanded", String(isOpen));
-  menuButton.setAttribute(
-    "aria-label",
-    isOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación",
-  );
 }
 
 if (menuButton && mainMenu) {
   menuButton.addEventListener("click", (): void => {
-    const isOpen: boolean =
-      menuButton.getAttribute("aria-expanded") === "true";
-
+    const isOpen: boolean = menuButton.getAttribute("aria-expanded") === "true";
     setMenuState(!isOpen);
-  });
-
-  mainMenu.querySelectorAll<HTMLAnchorElement>("a").forEach(
-    (link: HTMLAnchorElement): void => {
-      link.addEventListener("click", (): void => setMenuState(false));
-    },
-  );
-
-  document.addEventListener("keydown", (event: KeyboardEvent): void => {
-    if (event.key === "Escape") {
-      setMenuState(false);
-      menuButton.focus();
-    }
-  });
-
-  const desktopBreakpoint: MediaQueryList =
-    window.matchMedia("(min-width: 768px)");
-
-  desktopBreakpoint.addEventListener("change", (): void => {
-    setMenuState(false);
   });
 }
 
-// 5. REFERENCIAS DE LA SECCIÓN DE PAÍSES
-// ========================================================
-
 const countriesContainer: HTMLElement | null =
   document.querySelector<HTMLElement>("#countries-container");
-
 const countrySearch: HTMLInputElement | null =
   document.querySelector<HTMLInputElement>("#country-search");
-
 const regionFilter: HTMLSelectElement | null =
   document.querySelector<HTMLSelectElement>("#region-filter");
 
-// Arreglo global para almacenar los países obtenidos de la API
 let allCountries: Country[] = [];
-
-// Variable para controlar el tiempo del debounce
 let debounceTimer: number;
+const INITIAL_VISIBLE_COUNTRIES = 8;
 
-// Función para aplicar simultáneamente los filtros de búsqueda y región
 function applyFilter(): void {
-  if (!countrySearch || !regionFilter || !countriesContainer) {
-    return;
-  }
+  if (!countrySearch || !regionFilter || !countriesContainer) return;
 
-  const query: string = countrySearch.value;
+  const query: string = countrySearch.value.trim();
   const region: string = regionFilter.value;
 
-  const filteredCountries: Country[] = filterCountries(
-    allCountries,
-    query,
-    region,
-  );
+  const filteredCountries: Country[] = filterCountries(allCountries, query, region);
+
+  if (filteredCountries.length === 0) {
+    countriesContainer.innerHTML = renderEmpty(query);
+    return;
+  }
 
   countriesContainer.innerHTML = renderCountryGrid(filteredCountries);
 }
 
-// Asignación de eventos con Debounce de 300ms en la caja de búsqueda
 countrySearch?.addEventListener("input", (): void => {
   clearTimeout(debounceTimer);
   debounceTimer = window.setTimeout(() => {
@@ -108,28 +66,39 @@ countrySearch?.addEventListener("input", (): void => {
 
 regionFilter?.addEventListener("change", applyFilter);
 
-// Función principal para cargar los países desde la API
 async function loadCountries(): Promise<void> {
   if (!countriesContainer) {
     console.error("No se encontró #countries-container.");
     return;
   }
 
+  // 1. Mostrar el estado de carga (Loading Skeleton)
+  countriesContainer.innerHTML = renderLoading();
+
   try {
     allCountries = await fetchCountries();
-    applyFilter();
+
+    if (allCountries.length === 0) {
+      countriesContainer.innerHTML = renderEmpty("");
+      return;
+    }
+
+    const initialCountries: Country[] = allCountries.slice(0, INITIAL_VISIBLE_COUNTRIES);
+    countriesContainer.innerHTML = renderCountryGrid(initialCountries);
   } catch (error: unknown) {
     const message: string =
-      error instanceof Error
-        ? error.message
-        : "Ocurrió un error desconocido.";
+      error instanceof Error ? error.message : "Ocurrió un error desconocido.";
+    console.error("Error al cargar los países:", message);
 
-    countriesContainer.innerHTML = `
-      <p class="col-span-full text-center text-red-600" role="alert">
-        ${message}
-      </p>
-    `;
-    console.error(error);
+    // 2. Mostrar el estado de error y conectar el botón Reintentar
+    countriesContainer.innerHTML = renderError("Verifica tu conexión e inténtalo nuevamente.");
+
+    const retryButton: HTMLButtonElement | null =
+      document.querySelector<HTMLButtonElement>("#retry-button");
+
+    retryButton?.addEventListener("click", (): void => {
+      void loadCountries();
+    });
   }
 }
 

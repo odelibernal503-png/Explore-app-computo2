@@ -1,69 +1,52 @@
-// src/render/states.ts
-
-// 1. Renderiza el estado de carga con 8 tarjetas skeleton animadas
+// 1. Estado de carga: Genera 8 tarjetas skeleton con animación
 export function renderLoading(): string {
-  const skeletonCards: string[] = Array.from(
-    { length: 8 },
-    (): string => `
-      <article
-        class="animate-pulse overflow-hidden rounded-xl bg-white shadow-md border border-gray-100"
-        aria-hidden="true"
-      >
-        <div class="h-40 bg-gray-200"></div>
-        <div class="space-y-3 p-5">
-          <div class="h-5 w-3/4 rounded bg-gray-200"></div>
-          <div class="h-4 w-full rounded bg-gray-200"></div>
-          <div class="h-4 w-2/3 rounded bg-gray-200"></div>
+  return Array.from({ length: 8 })
+    .map(
+      () => `
+      <article class="flex flex-col overflow-hidden rounded-2xl bg-white shadow-md animate-pulse">
+        <div class="aspect-3/2 w-full bg-gray-200"></div>
+        <div class="flex flex-1 flex-col p-5 space-y-4">
+          <div class="h-6 bg-gray-200 rounded w-3/4"></div>
+          <div class="space-y-2">
+            <div class="h-4 bg-gray-200 rounded w-full"></div>
+            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+          </div>
+          <div class="h-9 bg-gray-200 rounded-full w-28 mt-2"></div>
         </div>
       </article>
     `
-  );
-
-  return skeletonCards.join("");
+    )
+    .join("");
 }
 
-// 2. Renderiza el estado vacío cuando la búsqueda o el filtro no devuelven resultados
+// 2. Estado vacío: Mensaje cuando la búsqueda no arroja resultados
 export function renderEmpty(query: string): string {
-  const searchDescription: string =
-    query.trim().length > 0
-      ? `No encontramos resultados para "${query}".`
-      : "No encontramos países para el filtro seleccionado.";
-
   return `
-    <section
-      class="col-span-full rounded-xl border border-neutral-300 bg-neutral-0 px-6 py-12 text-center"
-      role="status"
-      aria-live="polite"
-    >
-      <h2 class="text-xl font-bold text-neutral-900">
-        No hay resultados
-      </h2>
-      <p class="mt-2 text-neutral-600">${searchDescription}</p>
-      <p class="mt-1 text-sm text-neutral-600">
-        Revisa el nombre o prueba con otra región.
+    <div class="col-span-full flex flex-col items-center justify-center py-16 px-4 text-center">
+      <div class="text-6xl mb-4">🔍</div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">País no encontrado</h3>
+      <p class="text-gray-600 max-w-md">
+        No pudimos encontrar ningún resultado para "<span class="font-semibold text-gray-900">${query}</span>". Intenta buscar con otro término o verifica la ortografía.
       </p>
-    </section>
+    </div>
   `;
 }
 
-// 3. Renderiza el estado de error con un botón funcional para reintentar
+// 3. Estado de error: Mensaje con un botón "Reintentar"
 export function renderError(message: string): string {
   return `
-    <section
-      class="col-span-full rounded-xl border border-red-300 bg-red-50 px-6 py-12 text-center"
-      role="alert"
-    >
-      <h2 class="text-xl font-bold text-red-700">
-        No pudimos cargar los países
-      </h2>
-      <p class="mt-2 text-red-600">${message}</p>
+    <div class="col-span-full flex flex-col items-center justify-center py-16 px-4 text-center">
+      <div class="text-5xl mb-4 text-red-500">⚠️</div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">Ocurrió un error</h3>
+      <p class="text-gray-600 max-w-md mb-6">${message}</p>
       <button
-        id="retry-button"
         type="button"
-        class="mt-6 rounded-lg bg-blue-500 px-5 py-3 font-semibold text-white transition hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+        id="retry-button"
+        class="rounded-full bg-orange-500 px-6 py-2.5 text-white font-medium hover:bg-orange-600 transition-colors shadow-sm cursor-pointer"
       >
         Reintentar
       </button>
-    </section>
+    </div>
   `;
 }

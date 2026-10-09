@@ -14,9 +14,10 @@ export function renderCountryCard(country: Country): string {
   >
     <img
       class="aspect-3/2 w-full shrink-0 object-cover"
-      src="${flagSvg}"
+      src="${flagSvg || "/placeholder.png"}"
       alt="${flagDescription}"
       loading="lazy"
+      onerror="this.onerror=null; this.src='/placeholder.png';"
     >
 
     <div class="flex flex-1 flex-col p-5 bg-white">
