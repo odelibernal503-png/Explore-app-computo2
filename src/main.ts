@@ -2,6 +2,7 @@ import "./style.css";
 import type { Country } from "./types/country";
 import { fetchCountries } from "./api/countries";
 import { renderCountryGrid } from "./render/countryGrid";
+import { filterCountries } from "./utils/filter";
 
 // Control accesible del menú de navegación móvil
 const menuButton: HTMLButtonElement | null =
@@ -61,28 +62,62 @@ if (menuButton && mainMenu) {
   });
 }
 
-function getRequiredElement<T extends Element>(
-  selector: string
-): T {
-  const element: T | null =
-    document.querySelector<T>(selector);
+// 5. REFERENCIAS DE LA SECCIÓN DE PAÍSES
+// ========================================================
 
-  if (!element) {
-    throw new Error(
-      `No se encontró el elemento: ${selector}`
-    );
+const countriesContainer: HTMLElement | null =
+  document.querySelector<HTMLElement>("#countries-container");
+
+const countrySearch: HTMLInputElement | null =
+  document.querySelector<HTMLInputElement>("#country-search");
+
+const regionFilter: HTMLSelectElement | null =
+  document.querySelector<HTMLSelectElement>("#region-filter");
+
+// Arreglo global para almacenar los países obtenidos de la API
+let allCountries: Country[] = [];
+
+// Variable para controlar el tiempo del debounce
+let debounceTimer: number;
+
+// Función para aplicar simultáneamente los filtros de búsqueda y región
+function applyFilter(): void {
+  if (!countrySearch || !regionFilter || !countriesContainer) {
+    return;
   }
 
-  return element;
+  const query: string = countrySearch.value;
+  const region: string = regionFilter.value;
+
+  const filteredCountries: Country[] = filterCountries(
+    allCountries,
+    query,
+    region,
+  );
+
+  countriesContainer.innerHTML = renderCountryGrid(filteredCountries);
 }
 
-const countriesContainer: HTMLElement = 
-  getRequiredElement<HTMLElement>("#countries-container");
+// Asignación de eventos con Debounce de 300ms en la caja de búsqueda
+countrySearch?.addEventListener("input", (): void => {
+  clearTimeout(debounceTimer);
+  debounceTimer = window.setTimeout(() => {
+    applyFilter();
+  }, 300);
+});
 
-async function initializeApp(): Promise<void> {
+regionFilter?.addEventListener("change", applyFilter);
+
+// Función principal para cargar los países desde la API
+async function loadCountries(): Promise<void> {
+  if (!countriesContainer) {
+    console.error("No se encontró #countries-container.");
+    return;
+  }
+
   try {
-    const countries: Country[] = await fetchCountries();
-    countriesContainer.innerHTML = renderCountryGrid(countries);
+    allCountries = await fetchCountries();
+    applyFilter();
   } catch (error: unknown) {
     const message: string =
       error instanceof Error
@@ -90,10 +125,7 @@ async function initializeApp(): Promise<void> {
         : "Ocurrió un error desconocido.";
 
     countriesContainer.innerHTML = `
-      <p
-        class="col-span-full text-center text-red-600"
-        role="alert"
-      >
+      <p class="col-span-full text-center text-red-600" role="alert">
         ${message}
       </p>
     `;
@@ -101,4 +133,4 @@ async function initializeApp(): Promise<void> {
   }
 }
 
-void initializeApp();
+void loadCountries();

@@ -57,29 +57,29 @@
         <h2 class="text-2xl font-extrabold text-[#111827] mb-1">Explora países del mundo</h2>
         <p class="text-xs text-[#525252] mb-5">Busca un país o filtra por región para consultar su información detallada</p>
         
-        <div class="flex flex-col md:flex-row gap-6">
-          <!-- Input de búsqueda -->
-          <div class="bg-white px-4 py-3 rounded-md shadow-sm w-full md:w-[540px] flex items-center gap-3 border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full">
+          <!-- Input de búsqueda (Muy ancho ocupando el espacio principal) -->
+          <div class="bg-white px-4 py-3 rounded-full shadow-sm flex-grow flex items-center gap-3 border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
             <img src="/src/assets/busqueda.svg" alt="" class="size-4 text-gray-400" aria-hidden="true" />
-            <label for="country-search" class="sr-only">Escriba el nombre del país</label>
-            <input id="country-search" type="text" placeholder="Escriba el nombre del país..." class="w-full bg-transparent focus:outline-none text-xs text-gray-700 placeholder-gray-400">
+            <label for="country-search" class="sr-only">Buscar un país...</label>
+            <input id="country-search" type="text" placeholder="Buscar un país..." class="w-full bg-transparent focus:outline-none text-xs text-gray-700 placeholder-gray-400">
           </div>
           
-          <!-- Selector de región -->
-          <div class="relative w-full md:w-[280px]">
-            <label for="region-filter" class="sr-only">Busque por región</label>
-            <select id="region-filter" class="bg-white px-4 py-3 pr-10 rounded-md shadow-sm w-full appearance-none border border-gray-300 text-xs text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#f9a03f] cursor-pointer transition-all duration-200">
-              <option value="">Busque por región</option>
-              <option value="asia">Asia</option>
-              <option value="europe">Europa</option>
-              <option value="americas">América</option>
-              <option value="africa">África</option>
+          <!-- Select de región (Compacto, redondeado y a la derecha) -->
+          <div class="bg-white px-4 py-3 rounded-full shadow-sm w-full md:w-[200px] border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
+            <label for="region-filter" class="sr-only">Todas las regiones</label>
+            <select id="region-filter" class="w-full bg-transparent focus:outline-none text-xs text-gray-700 cursor-pointer">
+              <option value="">Todas las regiones</option>
+              <option value="Africa">África</option>
+              <option value="Americas">América</option>
+              <option value="Asia">Asia</option>
+              <option value="Europe">Europa</option>
+              <option value="Oceania">Oceanía</option>
             </select>
-            <img src="/src/assets/selector.svg" alt="" class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 size-3.5 text-gray-500" aria-hidden="true" />
           </div>
         </div>
       </section>
-
+      
       <!-- Grid responsive de tarjetas (Dinámico) -->
       <section id="paises" class="w-full">
         <h3 class="text-lg font-bold text-[#111827] mb-5">Países recomendados</h3>
