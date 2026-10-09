@@ -3,9 +3,9 @@ import type { Country } from "../types/country";
 export function filterCountries(
   countries: Country[],
   query: string,
-  region: string
+  region: string,
 ): Country[] {
-  const normalizedQuery: string = query
+  const normalizeQuery: string = query
     .trim()
     .toLowerCase();
 
@@ -15,12 +15,12 @@ export function filterCountries(
         country.names.common.toLowerCase();
 
       const matchesName: boolean =
-        countryName.includes(normalizedQuery);
+        countryName.includes(normalizeQuery);
 
       const matchesRegion: boolean =
         region === "" || country.region === region;
 
       return matchesName && matchesRegion;
-    }
+    },
   );
 }

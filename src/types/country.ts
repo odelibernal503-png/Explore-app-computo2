@@ -1,44 +1,45 @@
 export interface CountryNames {
-    common: string;
+  common: string;
 }
 
 export interface CountryCodes {
-    alpha_2: string;
+  alpha_2: string;
 }
 
 export interface CountryFlag {
-    url_svg: string;
-    description: string;
+  url_svg: string;
+  description: string;
 }
 
 export interface CountryCapital {
-    name: string;
+  name: string;
 }
 
 export interface Country {
-    names: CountryNames;
-    cca2: CountryCodes;
-    flag: CountryFlag;
-    capitals: CountryCapital[];
-    population: number;
-    region: string;
-    subregion: string;
+  names: CountryNames;
+  codes: CountryCodes;
+  flag: CountryFlag;
+  population: number;
+  region: string;
+  capitals: CountryCapital[];
 }
 
 export interface CountriesMeta {
-    total: number;
-    count: number;
-    limit: number;
-    offset: number;
-    more: boolean;
+  total: number;
+  count: number;
+  limit: number;
+  offset: number;
+  more: boolean;
 }
 
 export interface CountriesData {
-    objects: Country[];
-    meta: CountriesMeta;
+  objects: Country[];
+  meta: CountriesMeta;
 }
 
 export interface CountriesResponse {
-    data: CountriesData;
+  data: {
+    objects: Country[];
+    meta: CountriesMeta;
+  }
 }
-

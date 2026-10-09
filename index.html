@@ -52,45 +52,53 @@
     <!-- Contenido principal -->
     <main id="inicio" class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-10 w-full flex-grow">
 
-      <!-- Sección de búsqueda y filtros -->
-      <section class="mb-8">
-        <h2 class="text-2xl font-extrabold text-[#111827] mb-1">Explora países del mundo</h2>
-        <p class="text-xs text-[#525252] mb-5">Busca un país o filtra por región para consultar su información detallada</p>
-        
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full">
-          <!-- Input de búsqueda (Muy ancho ocupando el espacio principal) -->
-          <div class="bg-white px-4 py-3 rounded-full shadow-sm flex-grow flex items-center gap-3 border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
-            <img src="/src/assets/busqueda.svg" alt="" class="size-4 text-gray-400" aria-hidden="true" />
-            <label for="country-search" class="sr-only">Buscar un país...</label>
-            <input id="country-search" type="text" placeholder="Buscar un país..." class="w-full bg-transparent focus:outline-none text-xs text-gray-700 placeholder-gray-400">
-          </div>
+      <!-- VISTA HOME -->
+      <section id="home-view">
+        <!-- Sección de búsqueda y filtros -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-extrabold text-[#111827] mb-1">Explora países del mundo</h2>
+          <p class="text-xs text-[#525252] mb-5">Busca un país o filtra por región para consultar su información detallada</p>
           
-          <!-- Select de región (Compacto, redondeado y a la derecha) -->
-          <div class="bg-white px-4 py-3 rounded-full shadow-sm w-full md:w-[200px] border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
-            <label for="region-filter" class="sr-only">Todas las regiones</label>
-            <select id="region-filter" class="w-full bg-transparent focus:outline-none text-xs text-gray-700 cursor-pointer">
-              <option value="">Todas las regiones</option>
-              <option value="Africa">África</option>
-              <option value="Americas">América</option>
-              <option value="Asia">Asia</option>
-              <option value="Europe">Europa</option>
-              <option value="Oceania">Oceanía</option>
-            </select>
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full">
+            <!-- Input de búsqueda -->
+            <div class="bg-white px-4 py-3 rounded-full shadow-sm flex-grow flex items-center gap-3 border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
+              <img src="/src/assets/busqueda.svg" alt="" class="size-4 text-gray-400" aria-hidden="true" />
+              <label for="country-search" class="sr-only">Buscar un país...</label>
+              <input id="country-search" type="text" placeholder="Buscar un país..." class="w-full bg-transparent focus:outline-none text-xs text-gray-700 placeholder-gray-400">
+            </div>
+            
+            <!-- Select de región -->
+            <div class="bg-white px-4 py-3 rounded-full shadow-sm w-full md:w-[200px] border border-gray-300 focus-within:ring-2 focus-within:ring-[#f9a03f] focus-within:outline-none transition-all duration-200">
+              <label for="region-filter" class="sr-only">Todas las regiones</label>
+              <select id="region-filter" class="w-full bg-transparent focus:outline-none text-xs text-gray-700 cursor-pointer">
+                <option value="">Todas las regiones</option>
+                <option value="Africa">África</option>
+                <option value="Americas">América</option>
+                <option value="Asia">Asia</option>
+                <option value="Europe">Europa</option>
+                <option value="Oceania">Oceanía</option>
+              </select>
+            </div>
           </div>
         </div>
-      </section>
-      
-      <!-- Grid responsive de tarjetas (Dinámico) -->
-      <section id="paises" class="w-full">
-        <h3 class="text-lg font-bold text-[#111827] mb-5">Países recomendados</h3>
         
-        <section 
-            id="countries-container"
-            class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4"
-            aria-label="Listado de países"
-        >
-          <!-- Las tarjetas se cargarán dinámicamente aquí mediante TypeScript -->
+        <!-- Grid responsive de tarjetas -->
+        <section id="paises" class="w-full">
+          <h3 class="text-lg font-bold text-[#111827] mb-5">Países recomendados</h3>
+          
+          <section 
+              id="countries-container"
+              class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4"
+              aria-label="Listado de países"
+          >
+            <!-- Las tarjetas se cargarán dinámicamente aquí mediante TypeScript -->
+          </section>
         </section>
+      </section>
+
+      <!-- VISTA DETAIL (Oculta por defecto para el router) -->
+      <section id="detail-view" hidden aria-live="polite">
+        <!-- El detalle del país se inyectará aquí -->
       </section>
 
     </main>

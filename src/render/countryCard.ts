@@ -1,69 +1,112 @@
 import type { Country } from "../types/country";
-import { formatPopulation, getCapital, getCommonName, getFlagDescription } from "../utils/format";
 
-export function renderCountryCard(country: Country): string {
-  const commonName: string = getCommonName(country);
-  const capital: string = getCapital(country);
-  const flagDescription: string = getFlagDescription(country, commonName);
-  const flagSvg: string = country.flag?.url_svg ?? "";
-  const populationText: string = formatPopulation(country.population);
+import {
+  formatPopulation,
+  getCapital,
+  getFlagDescription,
+} from "../utils/format";
+
+export function renderCountryCard(
+  country: Country
+): string {
+  const capital: string =
+    getCapital(country);
+
+  const flagDescription: string =
+    getFlagDescription(country);
+
+  const formattedPopulation: string =
+    formatPopulation(country.population);
+
+  const code: string = country.codes.alpha_2;
+  const detailUrl: string =
+    `#/country/${encodeURIComponent(code)}`;
 
   return `
-  <article
-    class="group flex w-full flex-col overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300"
-  >
-    <img
-      class="aspect-3/2 w-full shrink-0 object-cover"
-      src="${flagSvg || "/placeholder.png"}"
-      alt="${flagDescription}"
-      loading="lazy"
-      onerror="this.onerror=null; this.src='/placeholder.png';"
-    >
+    <article
+      class="@container group flex w-full flex-col 
+      overflow-hidden rounded-lg bg-white shadow-md 
+      transition-all duration-300 hover:-translate-y-1 
+      hover:shadow-xl focus-within:ring-2 focus-within:ring-orange-500 
+      focus-within:ring-offset-2">
 
-    <div class="flex flex-1 flex-col p-5 bg-white">
-      <h2 class="text-xl font-bold text-gray-900">
-        ${commonName}
+      <div class="flex flex-col @min-[20rem]:flex-row">
+
+      <img
+        class="aspect-3/2 w-full shrink-0 object-cover 
+        @min-[20rem]:aspect-auto @min-[20rem]:w-2/5"
+        src="${country.flag.url_svg || "/placeholder.png"}"
+        alt="${flagDescription}"
+        loading="lazy"
+        onerror="this.onerror=null; this.src='/placeholder.png';"
+      >
+
+      <div class="flex min-w-0 flex-1 flex-col p-5 @min-[20rem]:w-3/5">
+      <!-- Aquí permanecen tu h2, dl y enlace Ver más -->
+
+      <h2 class="text-(length:--font-country-name) font-bold text-neutral-900">
+        ${code
+      ? `<a
+        href="${detailUrl}"
+        class="hover:text-blue-500 hover:underline
+          focus-visible:outline-none
+          focus-visible:ring-2 focus-visible:ring-orange-500"
+        >
+          ${country.names.common}
+        </a>`
+      : country.names.common}
       </h2>
 
-      <dl class="mt-4 space-y-3 text-base text-gray-700">
-        <div class="grid grid-cols-[84px_1fr] gap-3">
-          <dt class="font-semibold text-gray-900">
-            Población:
-          </dt>
-          <dd>
-            ${populationText}
-          </dd>
-        </div>
+        <dl class="mt-4 space-y-3 text-base">
+          <div class="grid grid-cols-[84px_1fr] gap-3">
+            <dt class="font-semibold">
+              Población:
+            </dt>
 
-        <div class="grid grid-cols-[84px_1fr] gap-3">
-          <dt class="font-semibold text-gray-900">
-            Región:
-          </dt>
-          <dd>
-            ${country.region ?? "No especificada"}
-          </dd>
-        </div>
+            <dd>
+              ${formattedPopulation}
+            </dd>
+          </div>
 
-        <div class="grid grid-cols-[84px_1fr] gap-3">
-          <dt class="font-semibold text-gray-900">
-            Capital:
-          </dt>
-          <dd>
-            ${capital}
-          </dd>
-        </div>
-      </dl>
+          <div class="grid grid-cols-[84px_1fr] gap-3">
+            <dt class="font-semibold">
+              Región:
+            </dt>
 
-      <div class="mt-6">
-        <button
-          type="button"
-          class="inline-block rounded-full bg-orange-500 px-7 py-2 text-white font-medium hover:bg-orange-600 transition-colors shadow-sm cursor-pointer"
-          aria-label="Ver más información de ${commonName}"
-        >
-          Ver más
-        </button>
+            <dd>
+              ${country.region}
+            </dd>
+          </div>
+
+          <div class="grid grid-cols-[84px_1fr] gap-3">
+            <dt class="font-semibold">
+              Capital:
+            </dt>
+
+            <dd>
+              ${capital}
+            </dd>
+          </div>
+        </dl>
+
+        ${code
+      ? `<a
+      href="${detailUrl}"
+      class="mt-6 flex min-h-11 w-full items-center justify-center rounded-full
+        bg-orange-500 px-5 py-2 text-lg font-medium text-neutral-900
+        transition-all duration-200 hover:bg-orange-600 active:scale-95
+        focus-visible:outline-2 focus-visible:outline-offset-4
+        focus-visible:outline-blue-600 sm:w-32"
+      aria-label="Ver más información de ${country.names.common}"
+    >
+      Ver más
+    </a>`
+      : `<p class="mt-6 text-sm text-neutral-600">
+      Detalle no disponible para este país.
+    </p>`}
+
       </div>
-    </div>
-  </article>
+      </div>
+    </article>
   `;
 }

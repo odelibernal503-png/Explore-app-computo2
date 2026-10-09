@@ -1,31 +1,60 @@
-import type { Country, CountriesResponse } from "../types/country";
+import type { Country } from "../types/country";
+import type { CountryDetail } from "../types/country-detail";
 
-const API_KEY: string = import.meta.env.VITE_REST_COUNTRIES_API_KEY;
+let countriesPromise: Promise<CountryDetail[]> | undefined;
 
-if (!API_KEY) {
-  throw new Error("Falta la API key de REST Countries.");
-}
+function loadCountries(): Promise<CountryDetail[]> {
+  if (!countriesPromise) {
+    countriesPromise = (async (): Promise<CountryDetail[]> => {
+      const response: Response = await fetch(
+        `${import.meta.env.BASE_URL}data/countries.json`,
+      );
 
-const API_URL: string =
-  "https://api.restcountries.com/countries/v5" +
-  "?response_fields=names.common,codes.alpha_2,flag.url_svg," +
-  "flag.description,population,region,capitals";
+      if (!response.ok) {
+        throw new Error(`Error al cargar los datos de la demo: ${response.status}`);
+      }
 
-export async function fetchCountries(): Promise<Country[]> {
-  const response: Response = await fetch(API_URL, {
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-    },
-  });
+      const data: unknown = await response.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("El archivo de países está vacío o tiene un formato incorrecto.");
+      }
 
-  if (!response.ok) {
-    throw new Error(
-      `No fue posible obtener los países. Código HTTP: ${response.status}`
-    );
+      return data as CountryDetail[];
+    })().catch((error: unknown) => {
+      countriesPromise = undefined;
+      throw error;
+    });
   }
 
-  const result: CountriesResponse =
-    await response.json() as CountriesResponse;
+  return countriesPromise;
+}
 
-  return result.data.objects;
+export async function fetchCountries(): Promise<Country[]> {
+  const countries = await loadCountries();
+  return countries.map((item: any) => ({
+    name: item.names?.common || item.name?.common || "Nombre no disponible",
+    capital: item.capitals?.[0] || item.capital?.[0] || "No disponible",
+    region: item.region || "No especificada",
+    population: item.population || 0,
+    flags: item.flags || { svg: item.flag?.url_svg || "", png: "" },
+    cca2: item.codes?.alpha_2 || item.cca2 || "",
+    ...item
+  }));
+}
+
+export async function fetchCountryByCode(code: string): Promise<CountryDetail> {
+  const countries: CountryDetail[] = await loadCountries();
+  const normalizedCode: string = code.trim().toUpperCase();
+  
+  const country: any = countries.find(
+    (item: any): boolean =>
+      (item.codes?.alpha_2 && item.codes.alpha_2.toUpperCase() === normalizedCode) ||
+      (item.cca2 && item.cca2.toUpperCase() === normalizedCode)
+  );
+
+  if (!country) {
+    throw new Error(`No se encontró el país solicitado con el código "${code}".`);
+  }
+
+  return country;
 }

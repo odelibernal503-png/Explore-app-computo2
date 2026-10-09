@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
-/* Design tokens de la Explorer App integrados con Tailwind v4 */
-@theme {
+@theme{
   /* Colores personalizados */
   --color-background: #f6e8ea;
   --color-border: #e5e7eb;
