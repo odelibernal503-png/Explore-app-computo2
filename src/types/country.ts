@@ -1,3 +1,5 @@
+// src/types/country.ts
+
 export interface CountryNames {
   common: string;
 }
@@ -41,5 +43,5 @@ export interface CountriesResponse {
   data: {
     objects: Country[];
     meta: CountriesMeta;
-  }
+  };
 }
