@@ -93,8 +93,8 @@ export function renderCountryCard(
       ? `<a
       href="${detailUrl}"
       class="mt-6 flex min-h-11 w-full items-center justify-center rounded-full
-        bg-orange-500 px-5 py-2 text-lg font-medium text-neutral-900
-        transition-all duration-200 hover:bg-orange-600 active:scale-95
+        bg-orange-500 px-5 py-2 text-lg font-medium text-white shadow-sm
+        transition-all duration-200 hover:bg-orange-600 hover:shadow-md active:scale-95
         focus-visible:outline-2 focus-visible:outline-offset-4
         focus-visible:outline-blue-600 sm:w-32"
       aria-label="Ver más información de ${country.names.common}"
